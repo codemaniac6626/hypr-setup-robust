@@ -39,3 +39,6 @@ done < "$MANIFEST"
 
 echo "------------------------------------------"
 echo "Success: Theme saved to $DEST_DIR"
+
+# Update the checkpoint to "Now"
+touch $EXPORT_ROOT/.last_sync

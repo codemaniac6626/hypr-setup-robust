@@ -136,10 +136,10 @@
     "window-rewrite": {
         "class<brave-browser>": "",
         "class<kitty>": "",
-        "class<code-oss>": "󰨞",
-        "class<vscodium>": "󰨞",
+        "class<code>": "󰨞",
+        "class<antigravity>": "󰨞",
         "class<notion>": "󰈄",
-        "class<reaper>": "󰝚"
+        "class<spotify>": "󰝚"
     },
     "format-window-separator": "  "
 }

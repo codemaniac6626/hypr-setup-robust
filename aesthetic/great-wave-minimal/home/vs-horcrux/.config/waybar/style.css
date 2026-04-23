@@ -25,6 +25,10 @@ window#waybar {
     color: @fg_color;
 }
 
+#workspaces button:hover {
+        background: transparent;
+}
+
 #workspaces button.active {
     color: @fg_selected;
 }

@@ -107,6 +107,91 @@ class Api:
             pass
         return bindings
 
+    def get_dirty_files(self):
+        script_path = os.path.join(self.hypr_setup_dir, 'dirty-files.sh')
+        if not os.path.exists(script_path):
+            return {"aesthetic": [], "functional": []}
+            
+        try:
+            result = subprocess.run(['bash', script_path], capture_output=True, text=True, check=True)
+            output = result.stdout
+            
+            aesthetic_dirty = []
+            functional_dirty = []
+            
+            current_pool = None
+            for line in output.split('\n'):
+                line = line.strip()
+                if line == "[Aesthetic Pool]":
+                    current_pool = "aesthetic"
+                elif line == "[Functional Pool]":
+                    current_pool = "functional"
+                elif "DIRTY:" in line:
+                    path = line.split("DIRTY:", 1)[1].strip()
+                    if current_pool == "aesthetic":
+                        aesthetic_dirty.append(path)
+                    elif current_pool == "functional":
+                        functional_dirty.append(path)
+            
+            return {
+                "aesthetic": aesthetic_dirty,
+                "functional": functional_dirty
+            }
+        except Exception as e:
+            print(f"Error getting dirty files: {e}")
+            return {"aesthetic": [], "functional": []}
+
+    def get_wallpapers(self):
+        wallpaper_dir = "/home/vs-horcrux/Pictures/wallpapers"
+        if not os.path.exists(wallpaper_dir):
+            return {}
+            
+        web_wallpapers_dir = os.path.join(self.base_dir, 'web', 'wallpapers')
+        if not os.path.exists(web_wallpapers_dir):
+            try:
+                os.symlink(wallpaper_dir, web_wallpapers_dir)
+            except Exception as e:
+                print(f"Failed to create symlink: {e}")
+        
+        valid_extensions = {'.png', '.jpg', '.jpeg', '.webp'}
+        wallpapers = {}
+        
+        try:
+            for root, dirs, files in os.walk(wallpaper_dir):
+                rel_path = os.path.relpath(root, wallpaper_dir)
+                folder_name = "Root" if rel_path == '.' else rel_path
+                
+                folder_wallpapers = []
+                for f in files:
+                    ext = os.path.splitext(f)[1].lower()
+                    if ext in valid_extensions:
+                        folder_wallpapers.append({
+                            "abs_path": os.path.join(root, f),
+                            "rel_path": os.path.join(rel_path, f) if rel_path != '.' else f
+                        })
+                
+                if folder_wallpapers:
+                    wallpapers[folder_name] = sorted(folder_wallpapers, key=lambda x: x['rel_path'])
+                    
+            return wallpapers
+        except Exception as e:
+            print(f"Error getting wallpapers: {e}")
+            return {}
+
+    def apply_wallpaper(self, path):
+        try:
+            if not path:
+                return {"status": "error", "message": "No wallpaper selected."}
+            script_path = os.path.join(self.hypr_setup_dir, 'apply-wallpaper.sh')
+            if not os.path.exists(script_path):
+                return {"status": "error", "message": "apply-wallpaper.sh not found."}
+            subprocess.run(['bash', script_path, path], check=True)
+            return {"status": "success", "message": "Wallpaper applied!"}
+        except subprocess.CalledProcessError as e:
+            return {"status": "error", "message": f"Failed to apply wallpaper: {str(e)}"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
     def close_app(self):
         if window:
             window.destroy()

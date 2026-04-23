@@ -1,5 +1,6 @@
 let selectedAesthetic = null;
 let selectedFunctional = null;
+let selectedWallpaper = null;
 
 let currentAesthetic = null;
 let currentFunctional = null;
@@ -19,6 +20,7 @@ window.addEventListener('pywebviewready', async function() {
         document.getElementById('apply-view').classList.add('hidden');
         document.getElementById('save-view').classList.add('hidden');
         document.getElementById('kb-view').classList.add('hidden');
+        document.getElementById('wallpapers-view').classList.add('hidden');
         document.getElementById(`${targetView}-view`).classList.remove('hidden');
         currentView = targetView;
     }
@@ -29,11 +31,30 @@ window.addEventListener('pywebviewready', async function() {
 
     document.getElementById('toggle-view-btn').addEventListener('click', () => {
         switchView('save');
+        loadDirtyFiles();
     });
 
     document.getElementById('toggle-kb-btn').addEventListener('click', () => {
         switchView('kb');
         loadKeybindings();
+    });
+
+    document.getElementById('toggle-walls-btn').addEventListener('click', () => {
+        switchView('wallpapers');
+        loadWallpapers();
+    });
+
+    document.getElementById('apply-wall-btn').addEventListener('click', async () => {
+        if (!selectedWallpaper) return;
+        const btn = document.getElementById('apply-wall-btn');
+        btn.disabled = true;
+        btn.textContent = 'APPLYING...';
+        
+        const result = await pywebview.api.apply_wallpaper(selectedWallpaper);
+        showToast(result.message, result.status === 'error');
+        
+        btn.textContent = 'APPLY WALLPAPER';
+        btn.disabled = false;
     });
 
     document.getElementById('save-aesthetic-btn').addEventListener('click', async () => {
@@ -46,6 +67,7 @@ window.addEventListener('pywebviewready', async function() {
         if (result.status === 'success') {
             input.value = '';
             await loadData();
+            if (currentView === 'save') loadDirtyFiles();
         }
         btn.disabled = false;
     });
@@ -60,6 +82,7 @@ window.addEventListener('pywebviewready', async function() {
         if (result.status === 'success') {
             input.value = '';
             await loadData();
+            if (currentView === 'save') loadDirtyFiles();
         }
         btn.disabled = false;
     });
@@ -92,6 +115,52 @@ async function loadData() {
     updateSelection('aesthetic-list', selectedAesthetic);
     updateSelection('functional-list', selectedFunctional);
     updateApplyButton();
+
+    populateDatalist('aesthetic-datalist', aesthetics);
+    populateDatalist('functional-datalist', functionals);
+}
+
+function populateDatalist(datalistId, items) {
+    const datalist = document.getElementById(datalistId);
+    if (!datalist) return;
+    datalist.innerHTML = '';
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        datalist.appendChild(option);
+    });
+}
+
+async function loadDirtyFiles() {
+    const aestheticList = document.getElementById('aesthetic-dirty-list');
+    const functionalList = document.getElementById('functional-dirty-list');
+    
+    if (aestheticList) aestheticList.innerHTML = '<div style="padding:10px; color:var(--text-secondary); font-size: 12px;">Checking...</div>';
+    if (functionalList) functionalList.innerHTML = '<div style="padding:10px; color:var(--text-secondary); font-size: 12px;">Checking...</div>';
+
+    const dirtyFiles = await pywebview.api.get_dirty_files();
+    
+    renderDirtyList('aesthetic-dirty-list', dirtyFiles.aesthetic);
+    renderDirtyList('functional-dirty-list', dirtyFiles.functional);
+}
+
+function renderDirtyList(containerId, files) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (!files || files.length === 0) {
+        container.innerHTML = '<div class="dirty-item synced">󰄵 All files synced.</div>';
+        return;
+    }
+    
+    files.forEach(file => {
+        const el = document.createElement('div');
+        el.className = 'dirty-item';
+        el.textContent = '󰏫 ' + file;
+        container.appendChild(el);
+    });
 }
 
 function renderList(containerId, items, currentActive, onClick) {
@@ -234,3 +303,66 @@ document.getElementById('kb-search').addEventListener('input', (e) => {
     });
     renderKeybindings(filtered);
 });
+
+let allWallpapers = {};
+
+async function loadWallpapers() {
+    allWallpapers = await pywebview.api.get_wallpapers();
+    renderWallpapers();
+}
+
+function renderWallpapers() {
+    const container = document.getElementById('wallpaper-container');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (!allWallpapers || Object.keys(allWallpapers).length === 0) {
+        container.innerHTML = '<div style="padding:15px; color:var(--text-secondary); font-size: 14px;">No wallpapers found in ~/Pictures/wallpapers.</div>';
+        return;
+    }
+    
+    for (const [folder, paths] of Object.entries(allWallpapers)) {
+        const folderHeader = document.createElement('h3');
+        folderHeader.style.color = 'var(--neon-color)';
+        folderHeader.style.marginTop = '15px';
+        folderHeader.style.marginBottom = '10px';
+        folderHeader.style.borderBottom = '1px dashed var(--border-color)';
+        folderHeader.style.paddingBottom = '5px';
+        folderHeader.style.fontSize = '14px';
+        folderHeader.style.textTransform = 'uppercase';
+        folderHeader.style.letterSpacing = '1px';
+        folderHeader.textContent = folder;
+        
+        container.appendChild(folderHeader);
+        
+        const folderGrid = document.createElement('div');
+        folderGrid.className = 'wallpaper-folder-grid';
+        
+        paths.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'wallpaper-item';
+            if (item.abs_path === selectedWallpaper) el.classList.add('selected');
+            
+            const img = document.createElement('img');
+            img.src = 'wallpapers/' + item.rel_path;
+            
+            el.appendChild(img);
+            
+            el.addEventListener('click', () => {
+                selectedWallpaper = item.abs_path;
+                renderWallpapers();
+                updateApplyWallButton();
+            });
+            
+            folderGrid.appendChild(el);
+        });
+        
+        container.appendChild(folderGrid);
+    }
+    updateApplyWallButton();
+}
+
+function updateApplyWallButton() {
+    const btn = document.getElementById('apply-wall-btn');
+    if (btn) btn.disabled = !selectedWallpaper;
+}

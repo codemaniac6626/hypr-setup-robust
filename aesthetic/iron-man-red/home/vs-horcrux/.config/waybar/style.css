@@ -22,8 +22,12 @@ window#waybar {
 
 /* --- WORKSPACES --- */
 #workspaces button {
-    padding: 0 4px;
+    padding: 4px;
     color: @fg_inactive;
+}
+
+#workspaces button:hover {
+	background: transparent;
 }
 
 #workspaces button.active {

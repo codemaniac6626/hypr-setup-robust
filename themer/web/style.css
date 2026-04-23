@@ -307,6 +307,51 @@ html {
     margin-top: 10px;
 }
 
+/* Dirty Files List */
+.dirty-files-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 1px dashed var(--border-color);
+}
+
+.dirty-title {
+    font-size: 12px;
+    color: var(--neon-color);
+    margin: 10px 10px 5px 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.dirty-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dirty-item {
+    font-size: 12px;
+    color: #ffcc00;
+    background: rgba(255, 204, 0, 0.05);
+    padding: 6px 10px;
+    border-radius: 4px;
+    word-break: break-all;
+    border-left: 2px solid #ffcc00;
+}
+
+.dirty-item.synced {
+    color: #00ffcc;
+    background: rgba(0, 255, 204, 0.05);
+    border-left-color: #00ffcc;
+}
+
 /* Keybindings List */
 .kb-item {
     display: flex;
@@ -347,4 +392,52 @@ html {
     font-size: 13px;
     margin-top: 6px;
     color: var(--text-primary);
+}
+
+/* Wallpapers Container */
+.wallpaper-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 5px 10px 0;
+}
+
+.wallpaper-folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.wallpaper-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    aspect-ratio: 16 / 9;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.wallpaper-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.wallpaper-item:hover {
+    border-color: rgba(0, 255, 204, 0.5);
+}
+
+.wallpaper-item:hover img {
+    transform: scale(1.05);
+}
+
+.wallpaper-item.selected {
+    border-color: var(--neon-color);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
 }

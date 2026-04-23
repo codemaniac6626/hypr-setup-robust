@@ -15,6 +15,7 @@
             <div class="title">HYPRLAND THEMER</div>
             <div class="controls">
                 <button id="toggle-apply-btn" class="control-btn" title="View Theme Selector">Theme</button>
+                <button id="toggle-walls-btn" class="control-btn" title="View Wallpapers">Walls</button>
                 <button id="toggle-kb-btn" class="control-btn" title="View Keybindings">Keys</button>
                 <button id="toggle-view-btn" class="control-btn" title="Toggle Save/Apply Mode">Save</button>
                 <button id="close-btn" class="control-btn">&times;</button>
@@ -52,8 +53,15 @@
                         <div class="save-form">
                             <p class="desc">Saves current aesthetic state to a new theme folder.</p>
                             <input type="text" id="save-aesthetic-input" class="neon-input"
-                                placeholder="Theme Name (e.g. dark-matter)">
+                                placeholder="Theme Name (e.g. dark-matter)" list="aesthetic-datalist">
+                            <datalist id="aesthetic-datalist"></datalist>
                             <button id="save-aesthetic-btn" class="neon-btn small-btn">SAVE AESTHETIC</button>
+                        </div>
+                        <div class="dirty-files-container">
+                            <h3 class="dirty-title">Unsaved Changes</h3>
+                            <div id="aesthetic-dirty-list" class="dirty-list">
+                                <!-- Dirty files injected here -->
+                            </div>
                         </div>
                     </div>
                     <div class="pane">
@@ -61,8 +69,15 @@
                         <div class="save-form">
                             <p class="desc">Saves current functional state to a new theme folder.</p>
                             <input type="text" id="save-functional-input" class="neon-input"
-                                placeholder="Theme Name (e.g. coding-mode)">
+                                placeholder="Theme Name (e.g. coding-mode)" list="functional-datalist">
+                            <datalist id="functional-datalist"></datalist>
                             <button id="save-functional-btn" class="neon-btn small-btn">SAVE FUNCTIONAL</button>
+                        </div>
+                        <div class="dirty-files-container">
+                            <h3 class="dirty-title">Unsaved Changes</h3>
+                            <div id="functional-dirty-list" class="dirty-list">
+                                <!-- Dirty files injected here -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,6 +94,20 @@
                 <div id="kb-list" class="list-container" style="flex: 1;">
                     <!-- Keybindings injected here -->
                 </div>
+            </div>
+        </div>
+
+        <div id="wallpapers-view" class="view-section hidden">
+            <div class="main-content" style="padding-top: 10px;">
+                <h2
+                    style="color: var(--neon-color); text-shadow: 0 0 5px rgba(0,255,204,0.3); margin-top: 0; font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                    WALLPAPERS</h2>
+                <div id="wallpaper-container" class="wallpaper-container">
+                    <!-- Thumbnails injected here -->
+                </div>
+            </div>
+            <div class="action-bar">
+                <button id="apply-wall-btn" class="neon-btn">APPLY WALLPAPER</button>
             </div>
         </div>
 
