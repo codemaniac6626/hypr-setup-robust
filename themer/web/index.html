@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyprland Themer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Titlebar -->
+        <div class="titlebar pywebview-drag-region">
+            <div class="title">HYPRLAND THEMER</div>
+            <div class="controls">
+                <button id="toggle-apply-btn" class="control-btn" title="View Theme Selector">Theme</button>
+                <button id="toggle-kb-btn" class="control-btn" title="View Keybindings">Keys</button>
+                <button id="toggle-view-btn" class="control-btn" title="Toggle Save/Apply Mode">Save</button>
+                <button id="close-btn" class="control-btn">&times;</button>
+            </div>
+        </div>
+
+        <div id="apply-view" class="view-section active">
+            <div class="main-content">
+                <div class="panes">
+                    <div class="pane">
+                        <h2>Aesthetic</h2>
+                        <div id="aesthetic-list" class="list-container">
+                            <!-- Items injected here -->
+                        </div>
+                    </div>
+                    <div class="pane">
+                        <h2>Functional</h2>
+                        <div id="functional-list" class="list-container">
+                            <!-- Items injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="apply-btn" class="neon-btn">EXECUTE SEQUENCE</button>
+            </div>
+        </div>
+
+        <div id="save-view" class="view-section hidden">
+            <div class="main-content">
+                <div class="panes">
+                    <div class="pane">
+                        <h2>Save Aesthetic</h2>
+                        <div class="save-form">
+                            <p class="desc">Saves current aesthetic state to a new theme folder.</p>
+                            <input type="text" id="save-aesthetic-input" class="neon-input"
+                                placeholder="Theme Name (e.g. dark-matter)">
+                            <button id="save-aesthetic-btn" class="neon-btn small-btn">SAVE AESTHETIC</button>
+                        </div>
+                    </div>
+                    <div class="pane">
+                        <h2>Save Functional</h2>
+                        <div class="save-form">
+                            <p class="desc">Saves current functional state to a new theme folder.</p>
+                            <input type="text" id="save-functional-input" class="neon-input"
+                                placeholder="Theme Name (e.g. coding-mode)">
+                            <button id="save-functional-btn" class="neon-btn small-btn">SAVE FUNCTIONAL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="kb-view" class="view-section hidden">
+            <div class="main-content" style="padding-top: 10px;">
+                <h2
+                    style="color: var(--neon-color); text-shadow: 0 0 5px rgba(0,255,204,0.3); margin-top: 0; font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                    KEYBINDINGS</h2>
+                <input type="text" id="kb-search" class="neon-input" placeholder="Search by key, action, or comment..."
+                    style="margin-bottom: 15px;">
+                <div id="kb-list" class="list-container" style="flex: 1;">
+                    <!-- Keybindings injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden">
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -39,6 +39,8 @@ sleep 0.5
 
 (uwsm app -- hyprpaper & disown)
 
+killall dunst & dunst &
+
 echo "Success! Theme applied."
 
 echo $1 > $EXPORT_ROOT/current-theme
