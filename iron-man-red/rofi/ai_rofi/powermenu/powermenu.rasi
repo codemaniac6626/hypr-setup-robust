@@ -6,9 +6,9 @@
     /* --- EXPOSED VARIABLES --- */
     bg-color:            #111217;
     bg-lighter:          #1e2024;
-    selected-bg:         #5f6c8a; /* Lime Green */
+    selected-bg:         #fb542b; /* Lime Green */
     selected-fg:         #111217;
-    border-color:        #5f6c8a;
+    border-color:        #fb542b;
     text-color:          #ffffff;
     
     font:                "JetBrains Mono 12";

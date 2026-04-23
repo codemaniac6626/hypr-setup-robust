@@ -6,7 +6,7 @@
 * {
     /* Colors */
     bg:          #000000;
-    bg-accent:   #5f6c8a; /* Green Header */
+    bg-accent:   #fb542b; /* Green Header */
     fg:          #FFFFFF;
     fg-alt:      #333333;
     divider:     #333333; /* Grey color for the lines */

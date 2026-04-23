@@ -5,7 +5,7 @@
 * {
     /* --- COLOR PALETTE --- */
     bg:                  #000000;         /* Solid Black */
-    header-bg:           #5f6c8a;         /* The Pink/Salmon color */
+    header-bg:           #fb542b;         /* The Pink/Salmon color */
     header-fg:           #000000;         /* Black text/icon for the header */
     selected-bg:         #1e2024;         /* Dark grey for hovered icons */
     fg:                  #ffffff;         /* White text for app names */
