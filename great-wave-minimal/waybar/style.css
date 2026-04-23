@@ -1,0 +1,108 @@
+
+/* --- VARIABLES --- */
+@define-color bg_color #1a1b26;
+@define-color fg_color #a9b1d6;
+@define-color fg_selected #ffffff;
+@define-color critical #ff5555; /* Red for power/battery */
+
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 14px;
+/*    min-height: 27px; */
+}
+
+window#waybar {
+    background: @bg_color;
+    color: @fg_color;
+}
+
+/* --- WORKSPACES --- */
+#workspaces button {
+    padding: 0 4px;
+    color: @fg_color;
+}
+
+#workspaces button.active {
+    color: @fg_selected;
+}
+
+/* --- MODULE SPACING & ALIGNMENT --- */
+#clock, #custom-terminal, #custom-browser, #pulseaudio, 
+#network, #backlight, #battery, #custom-power {
+    padding: 0 8px;
+}
+
+/* Negative margins for tighter grouping */
+#battery, #clock { margin-right: -7px; }
+#custom-terminal, #custom-power { margin-left: -7px; }
+#backlight { margin-left: -3px; }
+
+/* --- SLIDERS (Unified Look) --- */
+#backlight-slider, #pulseaudio-slider {
+    min-width: 100px;
+    padding: 0 10px;
+}
+
+#backlight-slider trough, #pulseaudio-slider trough {
+    min-height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#backlight-slider highlight, #pulseaudio-slider highlight {
+    background-color: @fg_selected;
+    border-radius: 10px;
+}
+
+#backlight-slider slider, #pulseaudio-slider slider {
+    min-height: 12px;
+    min-width: 12px;
+    margin: -4px 0; /* Centers head on the ramp */
+    background-color: @fg_selected;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+/* --- SPECIAL STATES --- */
+#battery.charging {
+    color: #9ece6a;
+}
+
+#battery.critical:not(.charging) {
+    color: @critical;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#custom-power {
+    color: @critical;
+    padding-right: 15px;
+    font-weight: bold;
+}
+
+@keyframes blink {
+    to { background-color: rgba(255, 85, 85, 0.5); color: @fg_selected; }
+}
+
+#workspaces.window-list {
+    padding-right: 12px; /* Add extra space here */
+    /* Ensure the container doesn't cut off children */
+    margin-left: -5px;
+}
+
+#workspaces.window-list button {
+    color: #ffffff;
+}
+
+#workspaces.window-list button.empty {
+    /* Hide the actual text "{name} - |" */
+    color: transparent;
+    padding-left: 8px;
+    padding-right: 8px;
+}

@@ -1,0 +1,68 @@
+[global]
+    ### --- EXPOSED VARIABLES --- ###
+    
+    # Geometry and Positioning
+    # Width is fixed, height is dynamic (max 110)
+    width = 300
+    height = 110
+    
+    # Offset: mapping your x-gap and y-gap
+    # Dunst uses "X x Y", 25px from right, 45px from top
+    offset = 15x15
+    origin = top-right
+    
+    # Padding and Spacing
+    padding = 10
+    horizontal_padding = 13
+    
+    # This creates the "list" gap between multiple notifications
+    separator_height = 5
+    
+    # UI Elements
+    frame_width = 2
+    # Using your notification-border variable
+    frame_color = "#5f6c8a"
+    
+    # Using your notification-radius (closest match)
+    corner_radius = 12
+    
+    # Font Settings (Using your exact JetBrainsMono string)
+    font = JetBrainsMonoNL Nerd Font, JetBrainsMonoNL NF ExtraBold 11
+    
+    # Text Alignment
+    alignment = left
+    vertical_alignment = center
+    
+    # Progress Bar (optional, for things like volume)
+    progress_bar = true
+    progress_bar_height = 8
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+
+    # This creates the vertical gap between separate notification boxes
+    # Increase this number for more space between the "cards"
+    separator_height = 10
+
+    # This ensures the gap is actually visible as empty space
+    # (If this is the same as your background, they will look like one big box)
+    separator_color = frame
+
+    # Ensure each notification has a distinct border
+    # frame_width = 2
+    frame_color = "#5f6c8a"
+
+[urgency_low]
+    background = "#1C1E27"
+    foreground = "#FFFFFF"
+    timeout = 4
+
+[urgency_normal]
+    background = "#1C1E27"
+    foreground = "#FFFFFF"
+    timeout = 6
+
+[urgency_critical]
+    background = "#1C1E27"
+    foreground = "#FFFFFF"
+    frame_color = "#BF616A" # Reddish for critical
+    timeout = 0
