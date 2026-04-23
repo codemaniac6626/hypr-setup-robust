@@ -1,10 +1,10 @@
-# 🌌 Antigravity Hyprland Themer & Setup
+# 🌌 Hyprland Themer & Setup
 
 A robust, modular, and aesthetically stunning theming system and configuration manager for Hyprland. 
 
 This repository solves the ultimate rice problem: **How do you change how your desktop *looks* without breaking how it *works*?** By strictly decoupling aesthetic components (colors, wallpapers, UI styles) from functional components (keybindings, window rules, monitors, autostart), you can mix and match themes on the fly without losing your core workflow.
 
-To top it all off, it comes with **Antigravity Themer**—a sleek, frameless, neon-pulsing GUI application built with PyWebview to manage it all.
+To top it all off, it comes with **Hyprland Themer**—a sleek, frameless, neon-pulsing GUI application built with PyWebview to manage it all.
 
 ---
 
@@ -26,7 +26,7 @@ To top it all off, it comes with **Antigravity Themer**—a sleek, frameless, ne
 ├── aesthetic-manifest      # List of file paths defining what constitutes an "aesthetic" theme
 ├── functional/             # Saved functional configurations (e.g., classic-sriram)
 ├── functional-manifest     # List of file paths defining what constitutes a "functional" theme
-└── themer/                 # The Antigravity Themer GUI application
+└── themer/                 # The Hyprland Themer GUI application
     ├── app.py              # PyWebview Python backend & logic
     ├── launch.sh           # Wrapper script to launch the GUI (useful for Hyprland window rules)
     ├── requirements.txt    # Python dependencies
@@ -59,9 +59,9 @@ Inside the `aesthetic/` and `functional/` directories are worker scripts.
 
 ---
 
-## 🖥️ The Antigravity Themer GUI
+## 🖥️ The Hyprland Themer GUI
 
-The **Antigravity Themer** is a custom pywebview application designed to look like a futuristic, glassmorphic HUD.
+The **Hyprland Themer** is a custom pywebview application designed to look like a futuristic, glassmorphic HUD.
 
 ### Features
 1. **Apply Mode:** View available Aesthetic and Functional themes side-by-side. Mix and match, then hit "EXECUTE SEQUENCE" to apply them instantly.
@@ -85,11 +85,9 @@ The **Antigravity Themer** is a custom pywebview application designed to look li
    ```
 
 3. **Hyprland Window Rules (Optional but Recommended):**
-   The `launch.sh` wrapper script sets the window class to `antigravity-themer`. You can use this to make the app float and center in your `hyprland.conf`:
+   The `launch.sh` wrapper script sets the window class to `Hyprland-themer`. You can use this to make the app float and center in your `hyprland.conf`:
    ```hyprland
-   windowrulev2 = float, class:^(antigravity-themer)$
-   windowrulev2 = center, class:^(antigravity-themer)$
-   windowrulev2 = size 800 600, class:^(antigravity-themer)$
+   windowrulev2 = float, title:^(Hyprland Themer)$
    ```
 
 ---
@@ -97,7 +95,7 @@ The **Antigravity Themer** is a custom pywebview application designed to look li
 ## 🛠️ Creating Your Own Themes
 
 1. Configure your desktop exactly how you like it.
-2. Open the **Antigravity Themer**.
+2. Open the **Hyprland Themer**.
 3. Toggle to **Save Mode**.
 4. Enter a name (e.g., `cyberpunk-night`) under Aesthetic or Functional.
 5. Click **Save**. The app will use the manifest to package your setup!
