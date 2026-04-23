@@ -24,7 +24,8 @@ cp -af "$THEME_PATH/"* /
 # 4. Refresh Visuals
 if pgrep -x waybar > /dev/null; then
     echo "Refreshing Waybar style..."
-    pkill -USR2 waybar
+    pkill waybar
+    waybar & disown
 fi
 
 if pgrep -x hyprland > /dev/null; then
