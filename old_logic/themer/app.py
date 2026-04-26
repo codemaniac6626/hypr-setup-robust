@@ -1,0 +1,270 @@
+import webview
+import os
+import subprocess
+import shutil
+
+class Api:
+    def __init__(self):
+        self.base_dir = os.path.dirname(os.path.abspath(__file__))
+        self.hypr_setup_dir = os.path.dirname(self.base_dir)
+
+    def get_theme_sets(self):
+        target_dir = os.path.join(self.hypr_setup_dir, 'theme-sets')
+        try:
+            folders = [f for f in os.listdir(target_dir) if os.path.isdir(os.path.join(target_dir, f))]
+            return sorted(folders)
+        except FileNotFoundError:
+            return []
+
+    def get_current_theme_set(self):
+        current_file = os.path.join(self.hypr_setup_dir, 'theme-sets', 'current-set')
+        try:
+            with open(current_file, 'r') as f:
+                return f.read().strip()
+        except FileNotFoundError:
+            return ""
+
+    def _get_folders(self, theme_set, category):
+        target_dir = os.path.join(self.hypr_setup_dir, 'theme-sets', theme_set, category)
+        try:
+            folders = [f for f in os.listdir(target_dir) if os.path.isdir(os.path.join(target_dir, f))]
+            return sorted(folders)
+        except FileNotFoundError:
+            return []
+
+    def _get_current(self, theme_set, category):
+        current_file = os.path.join(self.hypr_setup_dir, 'theme-sets', theme_set, category, 'current-theme')
+        try:
+            with open(current_file, 'r') as f:
+                return f.read().strip()
+        except FileNotFoundError:
+            return ""
+
+    def get_aesthetics(self, theme_set):
+        return self._get_folders(theme_set, 'aesthetic')
+
+    def get_functionals(self, theme_set):
+        return self._get_folders(theme_set, 'functional')
+
+    def get_current_aesthetic(self, theme_set):
+        return self._get_current(theme_set, 'aesthetic')
+
+    def get_current_functional(self, theme_set):
+        return self._get_current(theme_set, 'functional')
+
+    def apply_themes(self, theme_set, aesthetic_name, functional_name):
+        try:
+            if aesthetic_name:
+                aesthetic_script = os.path.join(self.hypr_setup_dir, 'theme-sets', 'apply-setup.sh')
+                subprocess.run(['bash', aesthetic_script, theme_set, 'aesthetic', aesthetic_name], check=True)
+            
+            if functional_name:
+                functional_script = os.path.join(self.hypr_setup_dir, 'theme-sets', 'apply-setup.sh')
+                subprocess.run(['bash', functional_script, theme_set, 'functional', functional_name], check=True)
+                
+            return {"status": "success", "message": "Themes applied successfully!"}
+        except subprocess.CalledProcessError as e:
+            return {"status": "error", "message": f"Failed to apply theme: {str(e)}"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def save_theme(self, theme_set, category, name):
+        try:
+            if not name or not name.strip():
+                return {"status": "error", "message": "Theme name cannot be empty."}
+            
+            script_path = os.path.join(self.hypr_setup_dir, 'theme-sets', 'make-setup.sh')
+            if not os.path.exists(script_path):
+                return {"status": "error", "message": f"make-setup.sh not found."}
+            
+            subprocess.run(['bash', script_path, theme_set, category, name.strip()], check=True)
+            return {"status": "success", "message": f"Saved {category} theme: {name}"}
+        except subprocess.CalledProcessError as e:
+            return {"status": "error", "message": f"Failed to save {category} theme: {str(e)}"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def save_new_theme_set(self, new_theme_set, aesthetic_name, functional_name):
+        try:
+            if not new_theme_set or not new_theme_set.strip():
+                return {"status": "error", "message": "Theme-set name cannot be empty."}
+            
+            new_theme_set = new_theme_set.strip()
+            current_theme_set = self.get_current_theme_set()
+            if not current_theme_set:
+                return {"status": "error", "message": "Current theme set not found."}
+                
+            new_theme_set_dir = os.path.join(self.hypr_setup_dir, 'theme-sets', new_theme_set)
+            
+            # Create directories
+            os.makedirs(os.path.join(new_theme_set_dir, 'aesthetic'), exist_ok=True)
+            os.makedirs(os.path.join(new_theme_set_dir, 'functional'), exist_ok=True)
+            
+            # Copy manifests
+            current_theme_set_dir = os.path.join(self.hypr_setup_dir, 'theme-sets', current_theme_set)
+            if os.path.exists(os.path.join(current_theme_set_dir, 'aesthetic-manifest')):
+                shutil.copy(os.path.join(current_theme_set_dir, 'aesthetic-manifest'), os.path.join(new_theme_set_dir, 'aesthetic-manifest'))
+            if os.path.exists(os.path.join(current_theme_set_dir, 'functional-manifest')):
+                shutil.copy(os.path.join(current_theme_set_dir, 'functional-manifest'), os.path.join(new_theme_set_dir, 'functional-manifest'))
+            
+            aesthetic_name = aesthetic_name.strip() if aesthetic_name else "default"
+            functional_name = functional_name.strip() if functional_name else "default"
+
+            script_path = os.path.join(self.hypr_setup_dir, 'theme-sets', 'make-setup.sh')
+            subprocess.run(['bash', script_path, new_theme_set, 'aesthetic', aesthetic_name], check=True)
+            subprocess.run(['bash', script_path, new_theme_set, 'functional', functional_name], check=True)
+            
+            return {"status": "success", "message": f"Created and saved new theme set: {new_theme_set}"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def get_keybindings(self):
+        current_set = self.get_current_theme_set()
+        if not current_set:
+            return []
+        current_func = self.get_current_functional(current_set)
+        if not current_func:
+            return []
+        
+        conf_path = os.path.join(self.hypr_setup_dir, 'theme-sets', current_set, 'functional', current_func, 'home', 'vs-horcrux', '.config', 'hypr', 'frags', 'keybindings.conf')
+        if not os.path.exists(conf_path):
+            return []
+            
+        bindings = []
+        try:
+            with open(conf_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('bind =') or line.startswith('binde =') or line.startswith('bindm ='):
+                        parts = line.split('#', 1)
+                        comment = parts[1].strip() if len(parts) > 1 else ""
+                        
+                        bind_str = parts[0].strip()
+                        if '=' in bind_str:
+                            _, config = bind_str.split('=', 1)
+                            args = [x.strip() for x in config.split(',')]
+                            
+                            if len(args) >= 3:
+                                modifiers = args[0]
+                                key = args[1]
+                                action = args[2]
+                                command = ",".join(args[3:]) if len(args) > 3 else ""
+                                
+                                bindings.append({
+                                    "modifiers": modifiers,
+                                    "key": key,
+                                    "action": action,
+                                    "command": command,
+                                    "comment": comment
+                                })
+        except Exception as e:
+            pass
+        return bindings
+
+    def get_dirty_files(self):
+        script_path = os.path.join(self.hypr_setup_dir, 'dirty-files.sh')
+        if not os.path.exists(script_path):
+            return {"aesthetic": [], "functional": []}
+            
+        try:
+            result = subprocess.run(['bash', script_path], capture_output=True, text=True, check=True)
+            output = result.stdout
+            
+            aesthetic_dirty = []
+            functional_dirty = []
+            
+            current_pool = None
+            for line in output.split('\n'):
+                line = line.strip()
+                if line == "[Aesthetic Pool]":
+                    current_pool = "aesthetic"
+                elif line == "[Functional Pool]":
+                    current_pool = "functional"
+                elif "DIRTY:" in line:
+                    path = line.split("DIRTY:", 1)[1].strip()
+                    if current_pool == "aesthetic":
+                        aesthetic_dirty.append(path)
+                    elif current_pool == "functional":
+                        functional_dirty.append(path)
+            
+            return {
+                "aesthetic": aesthetic_dirty,
+                "functional": functional_dirty
+            }
+        except Exception as e:
+            print(f"Error getting dirty files: {e}")
+            return {"aesthetic": [], "functional": []}
+
+    def get_wallpapers(self):
+        wallpaper_dir = "/home/vs-horcrux/Pictures/wallpapers"
+        if not os.path.exists(wallpaper_dir):
+            return {}
+            
+        web_wallpapers_dir = os.path.join(self.base_dir, 'web', 'wallpapers')
+        if not os.path.exists(web_wallpapers_dir):
+            try:
+                os.symlink(wallpaper_dir, web_wallpapers_dir)
+            except Exception as e:
+                print(f"Failed to create symlink: {e}")
+        
+        valid_extensions = {'.png', '.jpg', '.jpeg', '.webp'}
+        wallpapers = {}
+        
+        try:
+            for root, dirs, files in os.walk(wallpaper_dir):
+                rel_path = os.path.relpath(root, wallpaper_dir)
+                folder_name = "Root" if rel_path == '.' else rel_path
+                
+                folder_wallpapers = []
+                for f in files:
+                    ext = os.path.splitext(f)[1].lower()
+                    if ext in valid_extensions:
+                        folder_wallpapers.append({
+                            "abs_path": os.path.join(root, f),
+                            "rel_path": os.path.join(rel_path, f) if rel_path != '.' else f
+                        })
+                
+                if folder_wallpapers:
+                    wallpapers[folder_name] = sorted(folder_wallpapers, key=lambda x: x['rel_path'])
+                    
+            return wallpapers
+        except Exception as e:
+            print(f"Error getting wallpapers: {e}")
+            return {}
+
+    def apply_wallpaper(self, path):
+        try:
+            if not path:
+                return {"status": "error", "message": "No wallpaper selected."}
+            script_path = os.path.join(self.hypr_setup_dir, 'apply-wallpaper.sh')
+            if not os.path.exists(script_path):
+                return {"status": "error", "message": "apply-wallpaper.sh not found."}
+            subprocess.run(['bash', script_path, path], check=True)
+            return {"status": "success", "message": "Wallpaper applied!"}
+        except subprocess.CalledProcessError as e:
+            return {"status": "error", "message": f"Failed to apply wallpaper: {str(e)}"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def close_app(self):
+        if window:
+            window.destroy()
+
+if __name__ == '__main__':
+    api = Api()
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'web', 'index.html')
+    
+    # Create frameless window with transparency enabled
+    window = webview.create_window(
+        'Hyprland Themer', 
+        html_path,
+        js_api=api,
+        width=800, 
+        height=600,
+        frameless=True,
+        transparent=True,
+        easy_drag=True,  # Enables easy dragging of frameless windows in pywebview
+    )
+    
+    # webview.start(debug=True)
+    webview.start()

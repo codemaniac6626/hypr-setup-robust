@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # --- PATHS ---
-AESTHETIC_MANIFEST="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/aesthetic-manifest"
-FUNCTIONAL_MANIFEST="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/functional-manifest"
+CURRENT_SET=$(cat /home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/theme-sets/current-set | tr -d '/ ' | tr -d '\n')
+AESTHETIC_MANIFEST="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/theme-sets/$CURRENT_SET/aesthetic-manifest"
+FUNCTIONAL_MANIFEST="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/theme-sets/$CURRENT_SET/functional-manifest"
 
 # Checkpoints
-AESTHETIC_SYNC="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/aesthetic/.last_sync"
-FUNCTIONAL_SYNC="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/functional/.last_sync"
+AESTHETIC_SYNC="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/theme-sets/$CURRENT_SET/aesthetic/.last_sync"
+FUNCTIONAL_SYNC="/home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/theme-sets/$CURRENT_SET/functional/.last_sync"
 
 # Function to check a manifest against a sync file
 check_dirty() {

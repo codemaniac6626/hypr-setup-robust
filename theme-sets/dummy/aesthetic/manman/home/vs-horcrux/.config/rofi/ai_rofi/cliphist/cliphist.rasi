@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * ROFI Color theme
+ * Updated: Disabled icons & Added dividers
+ *******************************************************************************/
+
+* {
+    /* Colors */
+    bg:          #000000;
+    bg-accent:   #fb542b; /* Green Header */
+    fg:          #FFFFFF;
+    fg-alt:      #333333;
+    divider:     #333333; /* Grey color for the lines */
+    
+    background-color: transparent;
+    text-color:       @fg;
+    font:            "JetBrainsMono Nerd Font 10";
+}
+
+window {
+    width:            350px;
+    background-color: @bg;
+    border-radius:    12px;
+    border:           0px;
+}
+
+mainbox {
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-accent;
+    padding:          15px;
+    children:         [ prompt, entry ];
+    border-radius:    12px 12px 0px 0px;
+}
+
+prompt {
+    text-color:       @fg-alt;
+    margin:           0px 10px 0px 0px;
+}
+
+entry {
+    text-color:       @fg-alt;
+    placeholder:      "Search";
+    placeholder-color: @fg-alt;
+}
+
+listview {
+    padding:      0px; /* Removed padding so dividers hit the edges */
+    lines:        10;
+    columns:      1;
+    fixed-height: false;
+    spacing:      0px; /* Removes gap between items so borders touch */
+}
+
+element {
+    padding:       12px 15px;
+    spacing:       0px;
+    /* This creates the grey divider below each item */
+    border:        0px 0px 1px 0px;
+    border-color:  @divider;
+}
+
+/* Optional: Removes the divider from the very last item for a cleaner look */
+element selected {
+    background-color: #111111;
+    text-color:       @bg-accent;
+}
+
+element-icon {
+    /* This completely disables the icon column */
+    enabled: false;
+}
+
+element-text {
+    vertical-align: 0.5;
+}

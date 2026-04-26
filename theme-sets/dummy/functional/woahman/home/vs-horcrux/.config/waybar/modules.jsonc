@@ -1,0 +1,147 @@
+{
+
+    "hyprland/workspaces": {
+        "format": "<span font_size='12pt'>{icon}</span>",
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "*": 3 
+        },
+        "format-icons": {
+            "1": "󰝤",
+            "2": "󰔶",
+            "3": "",
+            "default": ""
+        }
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "tooltip": false
+    },
+
+    "custom/terminal": {
+        "format": "<span font_size='12pt'></span>",
+        "on-click": "kitty", 
+        "tooltip": false
+    },
+
+    "custom/browser": {
+        "format": "<span font_size='12pt'></span>",
+        "on-click": "brave-browser",
+        "tooltip": false
+    },
+
+    /* --- VOLUME GROUP WITH SLIDER --- */
+    "group/volume": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 200,
+            "children-class": "not-power",
+            "transition-left-to-right": false
+        },
+        "modules": ["pulseaudio", "pulseaudio/slider"]
+    },
+
+    "pulseaudio": {
+        "format": "<span font_size='15pt'>{icon}</span>",
+        "format-muted": "<span font_size='15pt'>󰝟</span>",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"] 
+        },
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-click-right": "env GTK_THEME=Adwaita:dark pavucontrol"
+    },
+
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
+    },
+
+    /* --- BRIGHTNESS GROUP WITH SLIDER --- */
+    "group/brightness": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 200,
+            "children-class": "not-power",
+            "transition-left-to-right": false
+        },
+        "modules": ["backlight", "backlight/slider"]
+    },
+
+    "backlight": {
+	"tooltip": false,
+        "device": "intel_backlight",
+        "format": "<span font_size='12pt'>{icon}</span>",
+        "format-icons": ["󰃞", "󰃟", "󰃠"]
+    },
+
+    "backlight/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal",
+        "device": "intel_backlight"
+    },
+
+    "network": {
+        "format-wifi": "<span font_size='12pt'>{icon}</span>",
+        "format-ethernet": "<span font_size='12pt'>󰈀</span>",
+        "format-disconnected": "<span font_size='12pt'>󰤮</span>",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "nm-connection-editor"
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "<span font_size='12pt'>{icon}</span>",
+        "format-charging": "<span font_size='12pt'>󱐋</span> {capacity}%",
+        "format-plugged": "<span font_size='12pt'></span> {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "custom/power": {
+        "format": "<span font_size='12pt'></span>",
+        "on-click": "source /home/vs-horcrux/.config/rofi/ai_rofi/powermenu/powermenu.sh",
+        "tooltip": false
+    },
+
+    "custom/divider": {
+        "format": "<span font_size='12pt'></span>",
+        "tooltip": false
+    },
+
+    "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 18,
+    "icon-theme": "Numix-Circle",
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "all-outputs": false,
+    "filter-tasks": true,
+    "ignore-list": [],
+    "rewrite": {
+        "Brave-browser": "Brave"
+    }
+    },
+
+    "hyprland/workspaces#window-list": {
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{name} - {windows}  |",
+    "window-rewrite-default": "󰘔",
+    "window-rewrite": {
+        "class<brave-browser>": "",
+        "class<kitty>": "",
+        "class<code>": "󰨞",
+        "class<antigravity>": "󰨞",
+        "class<notion>": "󰈄",
+        "class<spotify>": "󰝚"
+    },
+    "format-window-separator": "  "
+}
+
+}

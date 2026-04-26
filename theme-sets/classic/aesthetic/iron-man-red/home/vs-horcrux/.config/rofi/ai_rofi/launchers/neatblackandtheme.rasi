@@ -1,0 +1,85 @@
+/**
+ * Rofi Launcher - Pink Header "Grid" Style
+ */
+
+* {
+    /* --- COLOR PALETTE --- */
+    bg:                  #000000;         /* Solid Black */
+    header-bg:           #fb542b;         /* The Pink/Salmon color */
+    header-fg:           #000000;         /* Black text/icon for the header */
+    selected-bg:         #1e2024;         /* Dark grey for hovered icons */
+    fg:                  #ffffff;         /* White text for app names */
+    
+    font:                "JetBrains Mono 10";
+}
+
+window {
+    background-color:    @bg;
+    width:               650px;
+    border-radius:       0 0 12px 12px;
+    border:              0px;
+}
+
+mainbox {
+    background-color:    transparent;
+    children:            [ "inputbar", "listview" ];
+}
+
+/* --- THE PINK HEADER --- */
+inputbar {
+    background-color:    @header-bg;
+    text-color:          @header-fg;
+    padding:             15px 20px;
+    children:            [ "prompt", "entry" ];
+}
+
+prompt {
+    background-color:    transparent;
+    text-color:          inherit;
+    content:             " "; /* Search Icon */
+}
+
+entry {
+    background-color:    transparent;
+    text-color:          inherit;
+    placeholder:         "Search";
+    placeholder-color:   #00000088;
+}
+
+/* --- THE ICON GRID --- */
+listview {
+    background-color:    @bg;
+    columns:             5;
+    lines:               3;
+    spacing:             10px;
+    padding:             25px;    /* Space inside the black box */
+    layout:              vertical;
+    fixed-height:        true;
+    scrollbar:           false;
+}
+
+element {
+    background-color:    transparent;
+    text-color:          @fg;
+    orientation:         vertical;
+    padding:             20px 0px;
+    border-radius:       8px;
+}
+
+element selected {
+    background-color:    @selected-bg;
+}
+
+element-icon {
+    size:                48px;
+    horizontal-align:    0.5;
+    background-color:    transparent;
+}
+
+element-text {
+    horizontal-align:    0.5;
+    background-color:    transparent;
+    text-color:          inherit;
+    font:                "JetBrains Mono 8";
+    margin:              5px 0px 0px 0px;
+}

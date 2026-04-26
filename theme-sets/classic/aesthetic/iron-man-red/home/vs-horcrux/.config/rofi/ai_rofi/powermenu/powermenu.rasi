@@ -1,0 +1,87 @@
+/**
+ * Rofi Powermenu - The "No-Vertical-Line" Version
+ */
+
+* {
+    /* --- EXPOSED VARIABLES --- */
+    bg-color:            #111217;
+    bg-lighter:          #1e2024;
+    selected-bg:         #fb542b; /* Lime Green */
+    selected-fg:         #111217;
+    border-color:        #fb542b;
+    text-color:          #ffffff;
+    
+    font:                "JetBrains Mono 12";
+}
+
+window {
+    background-color:    @bg-color;
+    width:               800px;
+    /* height:              350px; */
+    /* Order: Top Right Bottom Left */
+    padding:             40px; 
+    border:              0px;
+    location:            center;
+    anchor:              center;
+}
+
+mainbox {
+    background-color:    @bg-color;
+    children:            [ "message", "listview" ];
+    spacing:             30px;
+}
+
+/* --- THE TOP BAR --- */
+message {
+    background-color:    transparent;
+    border:              2px;
+    border-color:        @border-color;
+    padding:             0px;
+}
+
+textbox {
+    text-color:          @text-color;
+    background-color:    transparent;
+    padding:             10px;
+    horizontal-align:    0.5;
+}
+
+/* --- THE ICON GRID --- */
+listview {
+    background-color:    transparent;
+    columns:             5;
+    lines:               1;
+    spacing:             15px;
+    layout:              vertical;
+    fixed-height:        true;
+    scrollbar:           false;
+    border:              0px;
+}
+
+element {
+    background-color:    @bg-lighter;
+    text-color:          @text-color;
+    border:              0px;
+    border-radius:       0px;
+    padding:             35px 0px;
+}
+
+element selected {
+    background-color:    @selected-bg;
+    text-color:          @selected-fg;
+}
+
+/* --- THE FIX: DISABLE THESE TWO --- */
+element-icon {
+    enabled:             false; /* This removes the white vertical lines */
+}
+
+element-text {
+    background-color:    transparent;
+    text-color:          inherit;
+    font:                "JetBrains Mono 32";
+    horizontal-align:    0.45;
+    vertical-align:      0.2;
+
+
+}
