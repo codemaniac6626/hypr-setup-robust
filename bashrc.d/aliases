@@ -1,0 +1,12 @@
+export workdir=/home/vs-horcrux/Desktop/workdir
+export dots=$workdir/dots
+export projects=$workdir/projects
+export maindots=$dots/hypr-setup/dotfiles/src
+
+alias aman='cat /home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/aesthetic-manifest'
+alias fman='cat /home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/functional-manifest'
+
+alias dirtyfiles='sh /home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/dirty-files.sh'
+
+alias stopidle='killall -STOP hypridle && notify-send "Hypridle Stopped"'
+alias startidle='killall -CONT hypridle && notify-send "Hypridle Resumed"'

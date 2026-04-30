@@ -88,7 +88,7 @@
         "format-ethernet": "<span font_size='12pt'>󰈀</span>",
         "format-disconnected": "<span font_size='12pt'>󰤮</span>",
         "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-        "on-click": "nm-connection-editor"
+        "on-click": "kitty --class nmtui-float -e nmtui"
     },
 
     "battery": {
@@ -105,6 +105,12 @@
     "custom/power": {
         "format": "<span font_size='12pt'></span>",
         "on-click": "source /home/vs-horcrux/.config/rofi/ai_rofi/powermenu/powermenu.sh",
+        "tooltip": false
+    },
+
+    "custom/monitor": {
+        "format": "<span font_size='12pt'></span>",
+        "on-click": "gnome-system-monitor",
         "tooltip": false
     },
 
@@ -139,9 +145,22 @@
         "class<code>": "󰨞",
         "class<antigravity>": "󰨞",
         "class<notion>": "󰈄",
-        "class<spotify>": "󰝚"
+        "class<spotify>": "󰝚",
+	"class<vesktop>": ""
     },
     "format-window-separator": "  "
-}
+},
+
+"bluetooth": {
+        "format": "<span font_size='12pt'>󰂯</span>",
+        "format-disabled": "<span font_size='12pt'>󰂲</span>",
+        "format-connected": "<span font_size='12pt'>󰂱</span>",
+        "format-connected-battery": "<span font_size='12pt'>󰂱</span>",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+        "on-click": "blueman-manager"
+    }
 
 }

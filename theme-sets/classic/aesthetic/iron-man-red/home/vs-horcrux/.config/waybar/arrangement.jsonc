@@ -2,5 +2,5 @@
 {
     "modules-left": ["clock", "custom/divider", "hyprland/workspaces#window-list"],
     "modules-center": ["hyprland/workspaces"],
-    "modules-right": ["group/volume", "group/brightness", "network", "battery", "custom/divider", "custom/power"]
+    "modules-right": ["custom/monitor", "bluetooth", "group/volume", "group/brightness", "network", "battery", "custom/divider", "custom/power"]
 }

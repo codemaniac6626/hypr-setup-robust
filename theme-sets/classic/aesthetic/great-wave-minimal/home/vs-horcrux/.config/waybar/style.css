@@ -110,3 +110,7 @@ window#waybar {
     padding-left: 8px;
     padding-right: 8px;
 }
+
+#custom-monitor {
+	margin-right: 11px;
+}
