@@ -10,3 +10,7 @@ alias dirtyfiles='sh /home/vs-horcrux/Desktop/workdir/dots/hypr-setup-robust/dir
 
 alias stopidle='killall -STOP hypridle && notify-send "Hypridle Stopped"'
 alias startidle='killall -CONT hypridle && notify-send "Hypridle Resumed"'
+
+# Add this inside one of your scripts in the storage partition
+export s="/mnt/storage"
+alias s="cd /mnt/storage"
