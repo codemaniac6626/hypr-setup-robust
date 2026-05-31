@@ -24,23 +24,13 @@ echo "--- Applying $THEME_TYPE Theme from $THEME_SET theme set: $THEME_NAME ---"
 # -n: No-clobber (optional: use -f instead to ensure the theme actually updates)
 cp -af "$THEME_PATH/"* /
 
-# 4. Refresh Visuals
-if pgrep -x waybar > /dev/null; then
-    echo "Refreshing Waybar style..."
-    pkill waybar
-    waybar & disown
-fi
-
-echo "Reloading Hyprland..."
-hyprctl reload
-
 killall hyprpaper 2>/dev/null
 pkill hyprpaper 2>/dev/null
 sleep 0.5
 
 (uwsm app -- hyprpaper & disown)
 
-killall dunst & dunst &
+source /home/vs-horcrux/.config/colors/applycolor.sh
 
 echo "Success! Theme applied."
 

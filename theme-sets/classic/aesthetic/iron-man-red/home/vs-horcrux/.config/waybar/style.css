@@ -42,7 +42,8 @@ window#waybar {
 #network,
 #backlight,
 #battery,
-#custom-power {
+#custom-power,
+#custom-updates {
     padding: 0 8px;
 }
 
@@ -53,7 +54,8 @@ window#waybar {
 }
 
 #custom-terminal,
-#custom-power {
+#custom-power,
+#custom-updates {
     margin-left: -7px;
 }
 
@@ -104,6 +106,12 @@ window#waybar {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+#custom-updates {
+    color: @critical;
+    padding-right: 3px;
+    font-weight: bold;
 }
 
 #custom-power {

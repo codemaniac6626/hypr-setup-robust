@@ -78,3 +78,104 @@ clear_marks() {
 # Alias 'clear' is often taken by the system, so we use a function
 # but you can rename this to whatever you prefer.
 alias clear-mark='clear_marks'
+
+reason() {
+    # 1. Configuration
+    local LOG_DIR="$HOME/cmd_logs"
+    local METADATA_FILE="$LOG_DIR/activity_history.log"
+    mkdir -p "$LOG_DIR"
+
+    # 2. Parse Flags
+    local user_reason=""
+    local OPTIND=1  # Reset getopts in case it was used previously in the shell
+
+    while getopts "t:" opt; do
+        case "$opt" in
+            t) user_reason="$OPTARG" ;;
+            *) echo "Usage: reason [-t 'your reason'] command"; return 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1)) # Remove the parsed options from the positional parameters
+
+    # 3. Capture the Reason Interactively if not provided via flag
+    if [[ -z "$user_reason" ]]; then
+        echo -n "Why are you running this? "
+        read -r user_reason
+        if [[ -z "$user_reason" ]]; then
+            echo "Reason is required to proceed."
+            return 1
+        fi
+    fi
+
+    # 4. Check if a command was actually provided
+    local cmd="$*"
+    if [[ -z "$cmd" ]]; then
+        echo "Error: No command specified to run."
+        return 1
+    fi
+
+    # 5. Prepare Command and Filenames
+    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    local file_safe_ts=$(date "+%Y%m%d_%H%M%S")
+    local output_log="$LOG_DIR/output_$file_safe_ts.log"
+
+    # 6. Log the Metadata
+    {
+        echo "----------------------"
+        echo "Timestamp: $timestamp"
+        echo "Reason: $user_reason"
+        echo "Command/Script: $cmd"
+        echo "LogFileName: $output_log"
+        echo "----------------------"
+        echo ""
+    } >> "$METADATA_FILE"
+
+    # 7. Execute and Capture Output
+    script -q -c "$cmd" "$output_log"
+}
+
+extctl() {
+    local action=$1
+    local target=$2
+    local mount_base="/mnt"
+
+    # Your Transcend StoreJet ID
+    local disk_id="usb-StoreJet_Transcend_1FD755460FFF-0:0"
+
+    case "$action" in
+        m)
+            if [ -n "$target" ]; then
+                echo "Mounting specific target: $target..."
+                sudo mount "$mount_base/$target"
+            else
+                echo "Mounting all external partitions..."
+                sudo mount -a
+            fi
+            ;;
+        u)
+            if [ -n "$target" ]; then
+                echo "Unmounting $target..."
+                sudo umount "$mount_base/$target"
+            else
+                echo "Unmounting all ext_* and stopping motor..."
+                sudo umount /mnt/ext_*
+		sleep 2
+                # Resolve physical disk node to stop vibration
+                local dev_node=$(readlink -f /dev/disk/by-id/$disk_id)
+                if [ -b "$dev_node" ]; then
+                    udisksctl power-off -b "$dev_node"
+                    echo "󱊟 Drive $dev_node powered down."
+                else
+                    echo "󱊟 Error: Transcend drive not found."
+                fi
+            fi
+            ;;
+        *)
+            echo "Usage: extctl {m|u} [partition_name]"
+            echo "Examples:"
+            echo "  extctl m             (Mount all & auto-fix)"
+            echo "  extctl u             (Unmount all & kill vibration)"
+            echo "  extctl m ext_samples (Mount specific)"
+            ;;
+    esac
+}

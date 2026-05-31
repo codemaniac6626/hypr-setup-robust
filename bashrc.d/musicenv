@@ -1,0 +1,3 @@
+# FOR INSTALLATION: Blocks net access during setup
+alias winejail='WINEPREFIX=$HOME/.winejail wine'
+alias winejailcfg='WINEPREFIX=$HOME/.winejail winecfg'

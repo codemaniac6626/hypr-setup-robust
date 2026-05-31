@@ -14,3 +14,18 @@ alias startidle='killall -CONT hypridle && notify-send "Hypridle Resumed"'
 # Add this inside one of your scripts in the storage partition
 export s="/mnt/storage"
 alias s="cd /mnt/storage"
+
+alias lwd="pwd -L"
+alias pwd="pwd -P"
+
+alias space="df -h"
+
+alias sudo="reason sudo"
+
+alias launch-reaper='PIPEWIRE_LATENCY="128/48000" reaper & disown'
+
+
+alias bashrc='source ~/.bashrc'
+
+alias edit='flatpak run com.vscodium.codium'
+alias code='antigravity'

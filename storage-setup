@@ -1,0 +1,87 @@
+Since the 800GB is already an empty partition on the same SSD as your Fedora installation, the process is significantly easier and safer because you don't have to worry about Windows "locking" the data or crashing the OS.
+
+However, since you mentioned Fedora is currently a single partition installation, your root (/) and home (/home) are likely sharing that space. Creating a separate partition for code and games is a smart move for organizational hygiene and future-proofing.
+
+1. The Strategy
+You have two main paths here:
+
+The "Separate Drive" Path (Recommended): Convert that 800GB empty space into a dedicated partition (e.g., ext4 or Btrfs) and mount it at /mnt/data. You then point your Steam Library and VS Code workspace there.
+
+The "Merge" Path (Risky): Delete the 800GB partition and "grow" your Fedora partition to fill the whole 1TB. This is more complex because you cannot easily expand a partition "backwards" if the empty space is physically located before the Fedora partition on the disk.
+
+We will proceed with the "Separate Drive" path as it fits your request for a separate partition.
+
+2. Step-by-Step Implementation
+Step 1: Identify the Partition Layout
+Open your terminal and run:
+
+Bash
+lsblk
+Identify which partition is the 800GB empty one (likely /dev/nvme0n1p2 or similar).
+
+Step 2: Clear and Format (The "Point of No Return")
+Warning: This command will permanently erase anything on that 800GB partition. Double-check the identifier (e.g., sdb2 or nvme0n1p2).
+
+Bash
+# Replace 'sdXN' with your actual partition ID
+sudo mkfs.ext4 -L Storage /dev/sdXN
+-L Storage: Sets a label so it's easy to identify.
+
+ext4: Better for gaming (Steam) and high-read/write code environments on Linux.
+
+Step 3: Create a Permanent Mount Point
+You don't want to manually click "Mount" every time you boot.
+
+Bash
+sudo mkdir -p /mnt/storage
+Step 4: Automate with fstab
+To make this partition feel like a natural part of your system:
+
+Get the UUID:
+
+Bash
+lsblk -f
+Copy the UUID for the new "Storage" partition.
+
+Edit the config:
+
+Bash
+sudo nano /etc/fstab
+Add this line at the bottom:
+
+Plaintext
+UUID=9555a79a-de7f-4dc0-9ac7-536596aa6345  /mnt/storage  ext4  defaults,noatime  0  2
+noatime: A performance tweak that stops Linux from writing to the disk every time a file is merely read (great for SSD lifespan).
+
+Step 5: Set Permissions
+By default, root owns /mnt/storage. You need to claim it:
+
+Bash
+sudo chown -R $USER:$USER /mnt/storage
+3. Organizing Your Files
+Now that the partition is live, here is how to use it effectively for your specific needs:
+
+For Code:
+Move your existing projects:
+
+Bash
+mv ~/Desktop/workdir /mnt/storage/workdir
+ln -s /mnt/storage/Desktop ~/Desktop/workdir
+(This creates a symbolic link so your terminal paths stay short and easy to navigate).
+
+For Games:
+Open Steam.
+
+Go to Settings > Storage.
+
+Click the drive dropdown and select Add Drive.
+
+Navigate to /mnt/storage and create a folder called SteamLibrary.
+
+Precautions & Warnings
+The Adjacency Trap:
+If you ever decide you want to merge this 800GB back into your main Fedora / partition later, it only works easily if the 800GB is physically located after the Fedora partition on the disk. If it's before it, you'll have to use a Live USB to move the partitions.
+
+The fstab Trap: If you make a typo in /etc/fstab, Fedora might drop you into an "Emergency Mode" shell on boot. If this happens, don't panic. Just run vi /etc/fstab, fix the typo (or comment out the line with #), and reboot.
+
+Since you're on Fedora, are you using the default Btrfs file system for your main install, or did you stick with ext4?

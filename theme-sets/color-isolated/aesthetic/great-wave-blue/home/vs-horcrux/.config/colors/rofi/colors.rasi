@@ -1,0 +1,13 @@
+/**
+ * Central Rofi Theme Palette
+ * Generated dynamically from colors.env
+ */
+* {
+    /* Base Color Tokens mapped from common tokens */
+    master-black:   #000000FF;
+    master-dark:    #111217FF;
+    master-surface: #1e2024FF;
+    master-grey:    #333333FF;
+    master-white:   #FFFFFFFF;
+    master-accent:  #425a68FF;
+}
